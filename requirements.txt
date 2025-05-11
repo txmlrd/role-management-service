@@ -1,0 +1,10 @@
+Flask
+Flask-SQLAlchemy
+python-dotenv
+PyMySQL
+Werkzeug
+cryptography
+itsdangerous
+flask_migrate
+Flask-JWT-Extended
+requests
