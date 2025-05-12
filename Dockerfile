@@ -5,7 +5,10 @@ ENV PYTHONPATH=/app
 
 WORKDIR /app
 
-RUN pip install redis
+# Install netcat dan clean up cache
+RUN apt-get update && apt-get install -y --no-install-recommends netcat-openbsd && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY . /app/
 

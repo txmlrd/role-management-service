@@ -8,3 +8,4 @@ itsdangerous
 flask_migrate
 Flask-JWT-Extended
 requests
+redis
