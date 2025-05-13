@@ -9,3 +9,18 @@ class Role(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    permissions = db.relationship(
+        'Permission',
+        secondary='roles_permissions',
+        backref='roles'
+    )
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+    
+    

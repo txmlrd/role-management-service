@@ -7,17 +7,17 @@ services:
     environment:
       - FLASK_ENV=development
       - SECRET_KEY=gungadhisanjaya
-      - DB_HOST=db
+      - DB_HOST=db_role
       - DB_USER=root
       - DB_PASSWORD=rootpassword
       - DB_NAME=role_management_service
     depends_on:
-      - db
+      - db_role
 
     command: >
       sh -c "
       echo 'Waiting for MySQL to be ready';
-      while ! nc -z db 3306; do sleep 1; done;
+      while ! nc -z db_role 3306; do sleep 1; done;
       echo 'MySQL ready';
       python run.py"
     volumes:
@@ -25,9 +25,8 @@ services:
     networks:
       - microservice-net
 
-  db:
+  db_role:
     image: mysql:8.0
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: role_management_service
@@ -35,6 +34,8 @@ services:
       - "3309:3306"
     networks:
       - microservice-net
+    volumes:
+      - db_role_data:/var/lib/mysql
 
 networks:
   microservice-net:

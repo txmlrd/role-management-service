@@ -5,5 +5,11 @@ import uuid
 class RolePermission(db.Model):
     __tablename__ = 'roles_permissions'
     
-    roles_id = db.Column(db.Integer, db.ForeignKey('roles.id'), primary_key=True)
-    permissions_id = db.Column(db.Integer, db.ForeignKey('permissions.id'), primary_key=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), primary_key=True)
+    permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'), primary_key=True)
+    
+    def to_dict(self):
+        return {
+            'roles_id': self.roles_id,
+            'permissions_id': self.permissions_id
+        }
