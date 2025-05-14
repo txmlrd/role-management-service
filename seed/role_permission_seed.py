@@ -15,7 +15,7 @@ with app.app_context():
     role_permissions_map = {
         "admin": ["view_user", "edit_user", "delete_user", "manage_roles", "view_reports"],
         "teacher": ["view_user", "view_reports"],
-        "student": ["view_user"]
+        "student": ["view_user"],
     }
 
     for role_name, perm_names in role_permissions_map.items():

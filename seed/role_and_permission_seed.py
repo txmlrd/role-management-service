@@ -11,19 +11,24 @@ from app.models.role_permission import RolePermission
 app = create_app()
 
 with app.app_context():
-    # Data seed
-    roles = ["admin", "teacher", "student"]
-    permissions = ["view_user", "edit_user", "delete_user", "manage_roles", "view_reports"]
-
-    # Seed roles
-    for role_name in roles:
-        if not Role.query.filter_by(name=role_name).first():
-            db.session.add(Role(name=role_name))
+    # Seed roles dengan ID tetap
+    roles = [
+        {"id": 1, "name": "admin"},
+        {"id": 2, "name": "teacher"},
+        {"id": 3, "name": "student"},
+        {"id": 4, "name": "guest"}
+    ]
 
     # Seed permissions
-    for perm_name in permissions:
-        if not Permission.query.filter_by(name=perm_name).first():
-            db.session.add(Permission(name=perm_name))
+    permissions = ["view_user", "edit_user", "delete_user", "manage_roles", "view_reports"]
+
+    # Tambah roles
+    for role in roles:
+        db.session.add(Role(id=role["id"], name=role["name"]))
+
+    # Tambah permissions
+    for perm in permissions:
+        db.session.add(Permission(name=perm))
 
     db.session.commit()
-    print("✅ Role dan permission berhasil di-seed.")
+    print("✅ Roles dan permissions berhasil di-seed dengan ID tetap.")
