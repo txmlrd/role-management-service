@@ -10,6 +10,6 @@ class RolePermission(db.Model):
     
     def to_dict(self):
         return {
-            'roles_id': self.roles_id,
-            'permissions_id': self.permissions_id
+            'role_id': self.role_id,
+            'permission_id': self.permission_id
         }
