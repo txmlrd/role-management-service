@@ -20,7 +20,31 @@ with app.app_context():
     ]
 
     # Seed permissions
-    permissions = ["view_user", "edit_user", "delete_user", "manage_roles", "view_reports"]
+    permissions = [
+    # Umum
+    "manage_role",
+    "manage_user",
+    "manage_profile",
+
+    # Student only
+    "assessment_session",
+    "assessment_detail_student",
+    "assignment_detail_student",
+    "class_student_tab",
+
+    # Teacher only
+    "modify_assessment",
+    "modify_question",
+    "assessment_detail_teacher",
+    "create_assessment",
+    "assignment_detail_teacher",
+    "class_student_tab_teacher",
+    "class_detail",
+
+    # Shared
+    "view_class",
+    "view_assessment"
+]
 
     # Tambah roles
     for role in roles:

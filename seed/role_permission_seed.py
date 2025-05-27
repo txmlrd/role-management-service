@@ -13,10 +13,48 @@ app = create_app()
 with app.app_context():
     # Data mapping: Role → list of permission names
     role_permissions_map = {
-        "admin": ["view_user", "edit_user", "delete_user", "manage_roles", "view_reports"],
-        "teacher": ["view_user", "view_reports"],
-        "student": ["view_user"],
-    }
+    "admin": [
+        "manage_role",
+        "manage_profile",
+        "manage_user",
+        "assessment_session",
+        "assessment_detail_student",
+        "assignment_detail_student",
+        "class_student_tab",
+        "modify_assessment",
+        "modify_question",
+        "assessment_detail_teacher",
+        "create_assessment",
+        "assignment_detail_teacher",
+        "class_student_tab_teacher",
+        "class_detail",
+        "view_class",
+        "view_assessment"
+    ],
+    "teacher": [
+        "manage_profile",
+        "modify_assessment",
+        "modify_question",
+        "assessment_detail_teacher",
+        "create_assessment",
+        "assignment_detail_teacher",
+        "class_student_tab_teacher",
+        "class_detail",
+        "view_class",
+        "view_assessment"
+    ],
+    "student": [
+        "manage_profile",
+        "assessment_session",
+        "assessment_detail_student",
+        "assignment_detail_student",
+        "class_student_tab",
+        "view_class",
+        "view_assessment"
+    ],
+    "guest": []
+}
+
 
     for role_name, perm_names in role_permissions_map.items():
         role = Role.query.filter_by(name=role_name).first()
