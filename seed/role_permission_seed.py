@@ -14,6 +14,7 @@ with app.app_context():
     # Data mapping: Role → list of permission names
     role_permissions_map = {
     "admin": [
+        "class_control",
         "manage_role",
         "manage_profile",
         "manage_user",
@@ -52,7 +53,7 @@ with app.app_context():
         "view_class",
         "view_assessment"
     ],
-    "guest": []
+    "guest": ["manage_profile"]
 }
 
 

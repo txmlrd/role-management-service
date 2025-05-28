@@ -40,10 +40,14 @@ with app.app_context():
     "assignment_detail_teacher",
     "class_student_tab_teacher",
     "class_detail",
+    
+    # Admin only
+    "class_control",
 
     # Shared
     "view_class",
     "view_assessment"
+    
 ]
 
     # Tambah roles
