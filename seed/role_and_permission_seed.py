@@ -47,7 +47,7 @@ with app.app_context():
     # Shared
     "view_class",
     "view_assessment"
-    
+    "get_item_pembelajaran"
 ]
 
     # Tambah roles

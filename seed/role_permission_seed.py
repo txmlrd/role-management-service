@@ -30,7 +30,8 @@ with app.app_context():
         "class_student_tab_teacher",
         "class_detail",
         "view_class",
-        "view_assessment"
+        "view_assessment",
+        "get_item_pembelajaran"
     ],
     "teacher": [
         "manage_profile",
@@ -42,7 +43,8 @@ with app.app_context():
         "class_student_tab_teacher",
         "class_detail",
         "view_class",
-        "view_assessment"
+        "view_assessment",
+        "get_item_pembelajaran"
     ],
     "student": [
         "manage_profile",
@@ -51,7 +53,8 @@ with app.app_context():
         "assignment_detail_student",
         "class_student_tab",
         "view_class",
-        "view_assessment"
+        "view_assessment",
+        "get_item_pembelajaran"
     ],
     "guest": ["manage_profile"]
 }
