@@ -31,7 +31,8 @@ with app.app_context():
         "class_detail",
         "view_class",
         "view_assessment",
-        "get_item_pembelajaran"
+        "get_item_pembelajaran",
+        "class_teacher_student"
     ],
     "teacher": [
         "manage_profile",
@@ -44,7 +45,8 @@ with app.app_context():
         "class_detail",
         "view_class",
         "view_assessment",
-        "get_item_pembelajaran"
+        "get_item_pembelajaran",
+        "class_teacher_student"
     ],
     "student": [
         "manage_profile",
@@ -54,7 +56,8 @@ with app.app_context():
         "class_student_tab",
         "view_class",
         "view_assessment",
-        "get_item_pembelajaran"
+        "get_item_pembelajaran",
+        "class_teacher_student"
     ],
     "guest": ["manage_profile"]
 }
