@@ -8,60 +8,123 @@ from app.models.role_permission import RolePermission
 permission_bp = Blueprint('permission', __name__)
 
 @permission_bp.route('/list', methods=['GET'])
-# @jwt_required()
 def list_permissions():
-    permissions = Permission.query.all()
-    return jsonify([permission.to_dict() for permission in permissions]), 200
-  
+    try:
+        permissions = Permission.query.all()
+        return jsonify({
+            'status': 'success',
+            'message': 'Permissions retrieved successfully',
+            'data': [permission.to_dict() for permission in permissions]
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'status': 'failed',
+            'message': f'Error retrieving permissions: {str(e)}',
+            'data': None
+        }), 500
+
+
 @permission_bp.route('/create', methods=['POST'])
-# @jwt_required()
 def create_permission():
     data = request.get_json()
     name = data.get('name')
-    
+
     if not name:
-        return jsonify({'error': 'Name is required'}), 400
-      
+        return jsonify({
+            'status': 'failed',
+            'message': 'Name is required',
+            'data': None
+        }), 400
+
     if Permission.query.filter_by(name=name).first():
-        return jsonify({'error': 'Permission already exists'}), 400
-    
-    new_permission = Permission(name=name)
-    db.session.add(new_permission)
-    db.session.commit()
-    
-    return jsonify(new_permission.to_dict()), 201
-  
+        return jsonify({
+            'status': 'failed',
+            'message': 'Permission already exists',
+            'data': None
+        }), 400
+
+    try:
+        new_permission = Permission(name=name)
+        db.session.add(new_permission)
+        db.session.commit()
+
+        return jsonify({
+            'status': 'success',
+            'message': 'Permission created successfully',
+            'data': new_permission.to_dict()
+        }), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'status': 'failed',
+            'message': f'Error creating permission: {str(e)}',
+            'data': None
+        }), 500
+
+
 @permission_bp.route('/delete/<int:permission_id>', methods=['DELETE'])
-# @jwt_required()
 def delete_permission(permission_id):
     permission = Permission.query.get(permission_id)
-    
+
     if not permission:
-        return jsonify({'error': 'Permission not found'}), 404
-    
-    db.session.delete(permission)
-    db.session.commit()
-    
-    return jsonify({'message': 'Permission deleted successfully'}), 200
-  
+        return jsonify({
+            'status': 'failed',
+            'message': 'Permission not found',
+            'data': None
+        }), 404
+
+    permission_name = permission.name
+    try:
+        db.session.delete(permission)
+        db.session.commit()
+        return jsonify({
+            'status': 'success',
+            'message': f'Permission "{permission_name}" deleted successfully',
+            'data': None
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'status': 'failed',
+            'message': f'Error deleting permission: {str(e)}',
+            'data': None
+        }), 500
+
+
 @permission_bp.route('/update/<int:permission_id>', methods=['PUT'])
-# @jwt_required()
 def update_permission(permission_id):
     data = request.get_json()
     name = data.get('name')
     
     if not name:
-        return jsonify({'error': 'Name is required'}), 400
+        return jsonify({
+            'status': 'failed',
+            'message': 'Name is required',
+            'data': None
+        }), 400
     
     permission = Permission.query.get(permission_id)
     
     if not permission:
-        return jsonify({'error': 'Permission not found'}), 404
-    
-    permission.name = name
-    db.session.commit()
-    
-    return jsonify(permission.to_dict()), 200
-  
+        return jsonify({
+            'status': 'failed',
+            'message': 'Permission not found',
+            'data': None
+        }), 404
 
-
+    try:
+        permission.name = name
+        db.session.commit()
+        return jsonify({
+            'status': 'success',
+            'message': f'Permission with id {permission_id} updated successfully',
+            'data': permission.to_dict()
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'status': 'failed',
+            'message': f'Error updating permission: {str(e)}',
+            'data': None
+        }), 500
