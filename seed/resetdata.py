@@ -2,8 +2,6 @@ import sys
 import os
 from app import create_app, db
 from app.models.role import Role
-from app.models.permissions import Permission
-from app.models.role_permission import RolePermission
 from sqlalchemy import text
 
 # Tambahkan path ke folder app
@@ -20,15 +18,10 @@ def reset_seed_data():
     with app.app_context():
         print("⚠️ Proses Reset Data Dimulai...")
         
-        # Hapus data dari tabel role_permission, permission, dan role
-        RolePermission.query.delete()
-        Permission.query.delete()
         Role.query.delete()
         db.session.commit()
 
         # Reset AUTO_INCREMENT untuk setiap tabel
-        db.session.execute(text("ALTER TABLE roles_permissions AUTO_INCREMENT = 1"))
-        db.session.execute(text("ALTER TABLE permissions AUTO_INCREMENT = 1"))
         db.session.execute(text("ALTER TABLE roles AUTO_INCREMENT = 1"))
         db.session.commit()
 
