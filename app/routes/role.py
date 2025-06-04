@@ -2,8 +2,6 @@ from config import Config
 from extensions import db, jwt, create_access_token, jwt_required, get_jwt_identity, decode_token, get_jwt
 from flask import Blueprint, jsonify, request
 from app.models.role import Role
-from app.models.permissions import Permission
-from app.models.role_permission import RolePermission
 
 role_bp = Blueprint('role', __name__)
 
@@ -121,66 +119,66 @@ def update_role(role_id):
         }), 500
 
   
-@role_bp.route('/assign-permission', methods=['POST'])
-def assign_permission():
-    data = request.get_json()
-    role_id = data.get('role_id')
-    permission_ids = data.get('permission_id')
+# @role_bp.route('/assign-permission', methods=['POST'])
+# def assign_permission():
+#     data = request.get_json()
+#     role_id = data.get('role_id')
+#     permission_ids = data.get('permission_id')
 
-    if not role_id or not permission_ids:
-        return jsonify({
-            'status': 'failed',
-            'message': 'Role ID and Permission IDs are required',
-            'data': None
-        }), 400
+#     if not role_id or not permission_ids:
+#         return jsonify({
+#             'status': 'failed',
+#             'message': 'Role ID and Permission IDs are required',
+#             'data': None
+#         }), 400
 
-    role = Role.query.get(role_id)
-    if not role:
-        return jsonify({
-            'status': 'failed',
-            'message': 'Role not found',
-            'data': None
-        }), 404
+#     role = Role.query.get(role_id)
+#     if not role:
+#         return jsonify({
+#             'status': 'failed',
+#             'message': 'Role not found',
+#             'data': None
+#         }), 404
 
-    try:
-        RolePermission.query.filter_by(role_id=role_id).delete()
+#     try:
+#         RolePermission.query.filter_by(role_id=role_id).delete()
 
-        for pid in permission_ids:
-            permission = Permission.query.get(pid)
-            if not permission:
-                return jsonify({
-                    'status': 'failed',
-                    'message': f'Permission with id {pid} not found',
-                    'data': None
-                }), 404
+#         for pid in permission_ids:
+#             permission = Permission.query.get(pid)
+#             if not permission:
+#                 return jsonify({
+#                     'status': 'failed',
+#                     'message': f'Permission with id {pid} not found',
+#                     'data': None
+#                 }), 404
 
-            existing = RolePermission.query.filter_by(
-                role_id=role.id, permission_id=permission.id
-            ).first()
+#             existing = RolePermission.query.filter_by(
+#                 role_id=role.id, permission_id=permission.id
+#             ).first()
 
-            if not existing:
-                role_permission = RolePermission(
-                    role_id=role.id, permission_id=permission.id
-                )
-                db.session.add(role_permission)
+#             if not existing:
+#                 role_permission = RolePermission(
+#                     role_id=role.id, permission_id=permission.id
+#                 )
+#                 db.session.add(role_permission)
 
-        db.session.commit()
+#         db.session.commit()
 
-        return jsonify({
-            'status': 'success',
-            'message': 'Permissions assigned successfully',
-            'data': {
-                'role_id': role.id,
-                'assigned_permissions': permission_ids
-            }
-        }), 200
+#         return jsonify({
+#             'status': 'success',
+#             'message': 'Permissions assigned successfully',
+#             'data': {
+#                 'role_id': role.id,
+#                 'assigned_permissions': permission_ids
+#             }
+#         }), 200
 
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({
-            'status': 'failed',
-            'message': f'Error assigning permissions: {str(e)}',
-            'data': None
-        }), 500
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({
+#             'status': 'failed',
+#             'message': f'Error assigning permissions: {str(e)}',
+#             'data': None
+#         }), 500
 
 
