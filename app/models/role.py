@@ -10,6 +10,11 @@ class Role(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    permissions = db.relationship(
+        'Permission',
+        secondary='roles_permissions',
+        backref='roles'
+    )
     def to_dict(self):
         return {
             'id': self.id,
