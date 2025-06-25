@@ -11,7 +11,6 @@ from app.models.role_permission import RolePermission
 app = create_app()
 
 with app.app_context():
-    # Data mapping: Role → list of permission names
     role_permissions_map = {
     "admin": [
         "class_control",

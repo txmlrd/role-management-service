@@ -1,5 +1,5 @@
 import redis
-from config import Config
+from app.config import Config
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, decode_token, get_jwt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy

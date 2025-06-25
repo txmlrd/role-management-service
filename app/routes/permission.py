@@ -1,5 +1,5 @@
-from config import Config
-from extensions import db, jwt, create_access_token, jwt_required, get_jwt_identity, decode_token, get_jwt
+from app.config import Config
+from app.extensions import db, jwt, create_access_token, jwt_required, get_jwt_identity, decode_token, get_jwt
 from flask import Blueprint, jsonify, request
 from app.models.role import Role
 from app.models.permissions import Permission
