@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from app.models.role import Role
 from app.models.permissions import Permission
 from app.models.role_permission import RolePermission
+from sqlalchemy.exc import IntegrityError
 
 permission_bp = Blueprint('permission', __name__)
 
@@ -113,6 +114,19 @@ def update_permission(permission_id):
             'data': None
         }), 404
 
+#cek nama permission
+    with db.session.no_autoflush:
+        existing = Permission.query.filter(
+            Permission.name == name,
+            Permission.id != permission.id
+        ).first()
+        if existing:
+            return jsonify({
+                'status': 'failed',
+                'message': 'Permission already exists',
+                'data': None
+            }), 400
+
     try:
         permission.name = name
         db.session.commit()
@@ -121,6 +135,13 @@ def update_permission(permission_id):
             'message': f'Permission with id {permission_id} updated successfully',
             'data': permission.to_dict()
         }), 200
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({
+            'status': 'failed',
+            'message': 'Permission name must be unique',
+            'data': None
+        }), 400
     except Exception as e:
         db.session.rollback()
         return jsonify({

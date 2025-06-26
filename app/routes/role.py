@@ -1,6 +1,7 @@
 from app.config import Config
 from app.extensions import db, jwt, create_access_token, jwt_required, get_jwt_identity, decode_token, get_jwt
 from flask import Blueprint, jsonify, request
+from sqlalchemy.exc import IntegrityError
 from app.models.role import Role
 from app.models.permissions import Permission
 from app.models.role_permission import RolePermission
@@ -83,6 +84,8 @@ def delete_role(role_id):
             'data': None
         }), 200
 
+
+
 @role_bp.route('/update/<int:role_id>', methods=['PUT'])
 def update_role(role_id):
     data = request.get_json()
@@ -94,15 +97,25 @@ def update_role(role_id):
             'message': 'Name is required',
             'data': None
         }), 400
-    
+
     role = Role.query.get(role_id)
-    
+
     if not role:
         return jsonify({
             'status': 'failed',
             'message': 'Role not found',
             'data': None
         }), 404
+        
+        #cek nama role
+    with db.session.no_autoflush:
+        existing = Role.query.filter(Role.name == name, Role.id != role.id).first()
+        if existing:
+            return jsonify({
+                'status': 'failed',
+                'message': 'Role already exists',
+                'data': None
+            }), 400
 
     try:
         role.name = name
@@ -112,6 +125,13 @@ def update_role(role_id):
             'message': f'Role with id {role_id} updated successfully',
             'data': role.to_dict()
         }), 200
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({
+            'status': 'failed',
+            'message': 'Role name must be unique',
+            'data': None
+        }), 400
     except Exception as e:
         db.session.rollback()
         return jsonify({
